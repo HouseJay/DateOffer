@@ -340,6 +340,8 @@ namespace WEBMAP
                 if (record != 0 && record != i + 1)
                 {
                     completed = exchange(completed, i + 1, record);
+                    completed = exchange(completed, record+1, i+2);
+                    i++;
                 }
             }
             return completed;
@@ -469,16 +471,30 @@ namespace WEBMAP
                 }
                 primary = primary.Remove(index);
 
-                primary=mySubString(primary, "name");
+                string startStand = truncate(primary, "name", "id");
+                primary =mySubString(primary, "name");
+                string stopStand = truncate(primary, "name", "id");
                 primary = mySubString(primary, "name");
 
                 if(roed != string.Empty)
                 {
-                    roed += "+"+truncate(primary, "name", "id");
+                    string bus = truncate(primary, "name", "id");
+                    int index1 = bus.IndexOf("(");
+                    if(index1 != -1)
+                    {
+                        bus = bus.Remove(index1);
+                    }
+                    roed += bus + "("+startStand+"--"+stopStand+")";
                 }
                 else
                 {
-                    roed = truncate(primary, "name", "id");
+                    string bus = truncate(primary, "name", "id");
+                    int index1 = bus.IndexOf("(");
+                    if (index1 != -1)
+                    {
+                        bus = bus.Remove(index1);
+                    }
+                    roed = bus + "(" + startStand + "--" + stopStand + ")";
                 }
                 redPrimary = mySubString(redPrimary, "bus\"");
                 primary = redPrimary;
